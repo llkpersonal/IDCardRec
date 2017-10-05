@@ -1,6 +1,7 @@
 package com.lilingkun.fx;
 
 import com.lilingkun.core.Binarizer;
+import com.lilingkun.core.Calculator;
 import com.lilingkun.core.PosDetector;
 import com.lilingkun.core.Splitter;
 import com.lilingkun.train.SVMPredict;
@@ -33,7 +34,7 @@ public class MainWindow extends Application{
     private final static int WINDOW_HEIGHT = 600;
     private final static String WINDOW_TITLE = "身份证号码识别";
 
-    private final static String picUrl = "/Users/KunKun/projects/idcards/id_card11.jpg";
+    private final static String picUrl = "/Users/KunKun/projects/idcards/id_card002.jpg";
 
     private AnchorPane pane = null;
     private Scene scene = null;
@@ -81,12 +82,20 @@ public class MainWindow extends Application{
         List<Mat> lstMat = splitter.split();
         SVMPredict predictor = new SVMPredict("./svm.model");
         String idNum = "";
+        int[] arg = new int[17];
+        int i = 0;
         for(Mat mat:lstMat) {
             Trainer.toPicFile(mat);
             int x = predictor.predict(mat);
             //System.out.println(x);
+            arg[i] = x;
+            i++;
             idNum += Integer.toString(x);
+            if( i == 17) break;
         }
+        int last = Calculator.getLastBit(arg);
+        if( last == 10 ) idNum += "X";
+        else idNum += Integer.toString(last);
         Text text = new Text();
         text.setX(550);
         text.setY(50);
