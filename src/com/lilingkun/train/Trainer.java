@@ -15,7 +15,7 @@ public class Trainer {
     public static void toPicFile(Mat mat) {
         for(int i = 0 ; i < mat.height(); i++ ) {
             for(int j = 0 ; j < mat.width() ;j++ ) {
-                if( mat.get(i,j)[0] > 150 ) {
+                if( mat.get(i,j)[0] > 230 ) {
                     mat.put(i,j,255);
                 } else {
                     mat.put(i,j,0);

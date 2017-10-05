@@ -33,7 +33,7 @@ public class MainWindow extends Application{
     private final static int WINDOW_HEIGHT = 600;
     private final static String WINDOW_TITLE = "身份证号码识别";
 
-    private final static String picUrl = "/Users/KunKun/projects/idcards/id_card12.jpg";
+    private final static String picUrl = "/Users/KunKun/projects/idcards/id_card11.jpg";
 
     private AnchorPane pane = null;
     private Scene scene = null;
@@ -82,7 +82,7 @@ public class MainWindow extends Application{
         SVMPredict predictor = new SVMPredict("/Users/KunKun/projects/IDCardRec/svm.model");
         String idNum = "";
         for(Mat mat:lstMat) {
-            //Trainer.toPicFile(mat);
+            Trainer.toPicFile(mat);
             int x = predictor.predict(mat);
             //System.out.println(x);
             idNum += Integer.toString(x);

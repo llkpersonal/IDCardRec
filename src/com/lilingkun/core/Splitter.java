@@ -50,7 +50,7 @@ public class Splitter {
         for(int i = 0 ; i < affineMat.height() ; i++) {
             String s = "";
             for(int j = 0 ; j < affineMat.width() ; j++ ) {
-                if(affineMat.get(i,j)[0] > 150) {
+                if(affineMat.get(i,j)[0] > 230) {
                     s += "0";
                 } else {
                     s+= "1";
@@ -66,7 +66,7 @@ public class Splitter {
             boolean flag = false;
             for(int j = 0 ; j < affineMat.height() ; j++ ) {
                 double tt = affineMat.get(j,i)[0];
-                if( tt < 150 ) {
+                if( tt < 230 ) {
                     if(s == -1 ) s = i;
                     flag = true;
                     break;

@@ -29,7 +29,7 @@ public class SVMPredict {
                 int q = i*mat.width()+j;
                 nodes[q] = new svm_node();
                 nodes[q].index = idx++;
-                if( mat.get(i,j)[0] > 150 ) {
+                if( mat.get(i,j)[0] > 230 ) {
                     nodes[q].value = 1;
                 } else {
                     nodes[q].value = 0;
