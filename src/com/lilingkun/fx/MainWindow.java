@@ -79,7 +79,7 @@ public class MainWindow extends Application{
         }
         Splitter splitter = new Splitter(binarizer.getBinarizerMat(), listOfRotatedRect.get(0));
         List<Mat> lstMat = splitter.split();
-        SVMPredict predictor = new SVMPredict("/Users/KunKun/projects/IDCardRec/svm.model");
+        SVMPredict predictor = new SVMPredict("./svm.model");
         String idNum = "";
         for(Mat mat:lstMat) {
             Trainer.toPicFile(mat);
