@@ -31,6 +31,26 @@ public class Binarizer {
         return this.binarizerMat;
     }
 
+    private boolean vis[][] = null;
+
+    private void dfs(Mat mat,int x,int y) {
+        System.out.println(x+" "+y);
+        if(vis[x][y]) return;
+        mat.put(x,y,255);
+        vis[x][y] = true;
+        for(int i = -1 ; i <= 1; i++ ) {
+            for(int j = -1 ; j <= 1 ; j++ ) {
+                if( i == 0 && j == 0 ) continue;
+                int dx = i+x;
+                int dy = j+y;
+                if(dx <0 || dy < 0 || dx >= mat.height() || dy >= mat.width()) continue;
+                if( Math.abs(mat.get(dx,dy)[0]) < 1e-8) {
+                    dfs(mat, dx, dy);
+                }
+            }
+        }
+    }
+
     private Mat binary() {
         Mat res = new Mat();
         double ostu_T = Imgproc.threshold(sourceMat, res, 0,255, Imgproc.THRESH_OTSU);
@@ -48,7 +68,7 @@ public class Binarizer {
 
         for( int i = 0 ; i < rows; i ++ ) {
             for(int j = 0 ; j < cols; j ++ ) {
-                if( i<2 || i > rows -3 || j < 2 || j > rows-3) {
+                if( i<2 || i > rows -3 || j < 2 || j > cols-3) {
                     if( sourceMat.get(i,j)[0] <= beta_lowT) {
                         res.put(i,j,0);
                     } else {
@@ -70,8 +90,17 @@ public class Binarizer {
                         res.put(i,j,255);
                     }
                 }
+//                System.out.println(i+" "+j);
             }
         }
+
+//        vis = new boolean[res.height()][res.width()];
+//        for(int i = 0 ; i < res.height() ; i++ ) {
+//            for(int j = 0 ; j < res.width() ; j++ ) {
+//                vis[i][j] = false;
+//            }
+//        }
+//        dfs(res, 0, 0);
         return res;
     }
 

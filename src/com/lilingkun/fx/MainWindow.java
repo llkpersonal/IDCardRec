@@ -3,19 +3,21 @@ package com.lilingkun.fx;
 import com.lilingkun.core.Binarizer;
 import com.lilingkun.core.PosDetector;
 import com.lilingkun.core.Splitter;
+import com.lilingkun.train.SVMPredict;
+import com.lilingkun.train.Trainer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
+import org.opencv.core.*;
 import org.opencv.core.Point;
-import org.opencv.core.RotatedRect;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -31,7 +33,7 @@ public class MainWindow extends Application{
     private final static int WINDOW_HEIGHT = 600;
     private final static String WINDOW_TITLE = "身份证号码识别";
 
-    private final static String picUrl = "/Users/KunKun/projects/idcards/id_card.jpg";
+    private final static String picUrl = "/Users/KunKun/projects/idcards/id_card12.jpg";
 
     private AnchorPane pane = null;
     private Scene scene = null;
@@ -47,9 +49,16 @@ public class MainWindow extends Application{
         primaryStage.setScene(this.scene);
 
         Mat image = Imgcodecs.imread(picUrl, 0);
+
+
+        Mat resultResized = new Mat(600*image.height()/image.width(),600, CvType.CV_8UC1);
+        Imgproc.resize(image,resultResized,resultResized.size(),0,0,Imgproc.INTER_CUBIC);
+        image = resultResized;
+
         Binarizer binarizer = new Binarizer(image);
         ImageView imageView = new ImageView();
         pane.getChildren().add(imageView);
+
 
         imageView.setX(0);
         imageView.setY(0);
@@ -70,20 +79,20 @@ public class MainWindow extends Application{
         }
         Splitter splitter = new Splitter(binarizer.getBinarizerMat(), listOfRotatedRect.get(0));
         List<Mat> lstMat = splitter.split();
+        SVMPredict predictor = new SVMPredict("/Users/KunKun/projects/IDCardRec/svm.model");
+        String idNum = "";
         for(Mat mat:lstMat) {
-            for(int i = 0 ; i < mat.height(); i++ ) {
-                String s = "";
-                for(int j = 0 ; j < mat.width() ; j++ ) {
-                    if(mat.get(i,j)[0] > 150) {
-                        s += "1";
-                    } else {
-                        s += "0";
-                    }
-                }
-                System.out.println(s);
-            }
-            System.out.println();
+            //Trainer.toPicFile(mat);
+            int x = predictor.predict(mat);
+            //System.out.println(x);
+            idNum += Integer.toString(x);
         }
+        Text text = new Text();
+        text.setX(550);
+        text.setY(50);
+        text.setText("身份证号："+idNum);
+        pane.getChildren().add(text);
         primaryStage.show();
+
     }
 }
