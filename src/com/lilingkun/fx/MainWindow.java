@@ -85,7 +85,7 @@ public class MainWindow extends Application{
         int[] arg = new int[17];
         int i = 0;
         for(Mat mat:lstMat) {
-            Trainer.toPicFile(mat);
+            //Trainer.toPicFile(mat);
             int x = predictor.predict(mat);
             //System.out.println(x);
             arg[i] = x;
